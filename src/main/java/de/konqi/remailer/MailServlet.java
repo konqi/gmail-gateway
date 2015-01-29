@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 /**
+ *
  * @author konqi
  */
 public class MailServlet extends HttpServlet {
