@@ -1,5 +1,6 @@
 package de.konqi.remailer;
 
+import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.appengine.http.UrlFetchTransport;
 import com.google.api.client.googleapis.extensions.appengine.auth.oauth2.AppIdentityCredential;
 import com.google.api.client.json.jackson2.JacksonFactory;
@@ -21,6 +22,10 @@ import java.util.Properties;
  * @author konqi
  */
 public class Messaging {
+    public static Gmail getGmailClient(Credential credential){
+        return new Gmail.Builder(Utils.HTTP_TRANSPORT, Utils.JSON_FACTORY, credential).build();
+    }
+
     /**
      * Send an email from the user's mailbox to its recipient.
      *
@@ -31,7 +36,7 @@ public class Messaging {
      * @throws MessagingException
      * @throws IOException
      */
-    private static void sendMessage(Gmail service, String userId, MimeMessage email)
+    public static void sendMessage(Gmail service, String userId, MimeMessage email)
             throws MessagingException, IOException {
         Message message = createMessageWithEmail(email);
         message = service.users().messages().send(userId, message).execute();
