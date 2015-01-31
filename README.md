@@ -22,4 +22,4 @@ and the email is forwarded to predefined recipients with the email address you a
 ## Setup instructions
 
 Download the source and place a *client_secrets.json* in src/main/resources.
-You can get the *client_secrets.json* from [Google developers console][https://console.developers.google.com/project/yourappid/apiui/credential].
+You can get the *client_secrets.json* from [Google developers console](https://console.developers.google.com/project/yourappid/apiui/credential).
