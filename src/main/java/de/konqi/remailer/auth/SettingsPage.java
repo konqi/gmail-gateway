@@ -1,10 +1,7 @@
 package de.konqi.remailer.auth;
 
-import com.fasterxml.jackson.core.JsonFactory;
 import com.google.api.client.auth.oauth2.AuthorizationCodeFlow;
 import com.google.api.client.extensions.appengine.auth.oauth2.AbstractAppEngineAuthorizationCodeServlet;
-import com.google.api.client.json.JsonParser;
-import com.google.api.client.json.JsonToken;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.googlecode.objectify.Key;

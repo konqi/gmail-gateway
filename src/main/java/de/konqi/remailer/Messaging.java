@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.util.Properties;
 
 /**
+ * Class used to handle output email through Gmail API or AppEngine mail facility
+ *
  * @author konqi
  */
 public class Messaging {
@@ -70,7 +72,7 @@ public class Messaging {
     }
 
     /**
-     * Sens a service message
+     * Sends a service message throug appengine mail facility
      * @param sender
      * @param recipient
      * @param subject

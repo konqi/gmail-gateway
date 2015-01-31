@@ -25,6 +25,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
+ * Utilities class for almost everything that
  * @author konqi
  */
 public class Utils {
@@ -40,6 +41,9 @@ public class Utils {
 
     private static GoogleClientSecrets clientSecrets;
 
+    /**
+     * static constructor 
+     */
     static {
         try {
             CREDENTIAL_STORE = Utils.DATA_STORE_FACTORY.getDataStore(StoredCredential.DEFAULT_DATA_STORE_ID);
@@ -48,6 +52,11 @@ public class Utils {
         }
     }
 
+    /**
+     * Gets data from client_secrets.json for authentication
+     * @return
+     * @throws IOException
+     */
     public static GoogleClientSecrets getClientCredential() throws IOException {
         if (clientSecrets == null) {
             clientSecrets = GoogleClientSecrets.load(JSON_FACTORY,
@@ -55,23 +64,31 @@ public class Utils {
             Preconditions.checkArgument(!clientSecrets.getDetails().getClientId().startsWith("Enter ")
                             && !clientSecrets.getDetails().getClientSecret().startsWith("Enter "),
                     "Download client_secrets.json file from https://console.developers.google.com/"
-                            + "?api=calendar into /src/main/resources/client_secrets.json");
+                            + " into /src/main/resources/client_secrets.json");
         }
 
         return clientSecrets;
     }
 
+    /**
+     * Gets the redirect uri for oauth2 callback
+     * @param req
+     * @return
+     */
     public static String getRedirectUri(HttpServletRequest req) {
         GenericUrl url = new GenericUrl(req.getRequestURL().toString());
         url.setRawPath("/oauth2callback");
         return url.build();
     }
 
+    /**
+     * Initialize a new Google authorization flow
+     * @return
+     * @throws IOException
+     */
     public static GoogleAuthorizationCodeFlow newFlow() throws IOException {
         return new GoogleAuthorizationCodeFlow.Builder(Utils.HTTP_TRANSPORT, Utils.JSON_FACTORY,
                 getClientCredential(), AUTH_SCOPES).setDataStoreFactory(
                 DATA_STORE_FACTORY).setAccessType("offline").build();
     }
-
-
 }
