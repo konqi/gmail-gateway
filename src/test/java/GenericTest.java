@@ -8,5 +8,6 @@ public class GenericTest {
     @Test
     public void test(){
         Assert.assertTrue(true);
+        return;
     }
 }
