@@ -15,6 +15,7 @@ public class OfyService {
     static {
         try {
             ObjectifyService.register(EmailMapping.class);
+            ObjectifyService.register(Handle.class);
         } catch(Exception e){
             logger.error("Error registering database classes.", e);
         }

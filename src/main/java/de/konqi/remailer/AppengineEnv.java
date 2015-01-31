@@ -13,5 +13,6 @@ public class AppengineEnv {
     // private static AppIdentityService appIdentity = AppIdentityServiceFactory.getAppIdentityService();
     public static final boolean DEBUG = (SystemProperty.environment.value() !=
             SystemProperty.Environment.Value.Production);
-    public static final String appId = SystemProperty.applicationId.get();
+    public static final String APP_ID = SystemProperty.applicationId.get();
+    public static final String MAIL_DOMAIN = AppengineEnv.APP_ID + ".appspotmail.com";
 }

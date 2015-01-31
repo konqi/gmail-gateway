@@ -1,8 +1,7 @@
 package de.konqi.remailer;
 
-import com.google.api.client.auth.oauth2.Credential;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.client.auth.oauth2.StoredCredential;
-import com.google.api.client.extensions.appengine.auth.oauth2.AppEngineCredentialStore;
 import com.google.api.client.extensions.appengine.datastore.AppEngineDataStoreFactory;
 import com.google.api.client.extensions.appengine.http.UrlFetchTransport;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
@@ -33,6 +32,7 @@ public class Utils {
 
     public static final HttpTransport HTTP_TRANSPORT = new UrlFetchTransport();
     public static final JsonFactory JSON_FACTORY = new JacksonFactory();
+    public static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     public static final List<String> AUTH_SCOPES = Arrays.asList(GmailScopes.GMAIL_COMPOSE);
     public static final DataStoreFactory DATA_STORE_FACTORY = AppEngineDataStoreFactory.getDefaultInstance();
@@ -63,7 +63,7 @@ public class Utils {
 
     public static String getRedirectUri(HttpServletRequest req) {
         GenericUrl url = new GenericUrl(req.getRequestURL().toString());
-        url.setRawPath("/oauth2callback");
+        url.setRawPath("/oauth2/oauth2callback");
         return url.build();
     }
 

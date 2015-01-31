@@ -1,29 +1,35 @@
 package de.konqi.remailer;
 
 import com.google.api.client.auth.oauth2.Credential;
-import com.google.api.client.extensions.appengine.http.UrlFetchTransport;
-import com.google.api.client.googleapis.extensions.appengine.auth.oauth2.AppIdentityCredential;
-import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.Base64;
 import com.google.api.services.gmail.Gmail;
-import com.google.api.services.gmail.GmailScopes;
 import com.google.api.services.gmail.model.Message;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.mail.MessagingException;
 import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Properties;
 
 /**
  * @author konqi
  */
 public class Messaging {
+    private static final Logger logger = LoggerFactory.getLogger(Messaging.class);
+
+    /**
+     * Gets an authorized Gmail client, ready to Gmail API stuff
+     * @param credential Authorized RequestInitializer object
+     * @return ready-to-use Gmail API client
+     */
     public static Gmail getGmailClient(Credential credential){
-        return new Gmail.Builder(Utils.HTTP_TRANSPORT, Utils.JSON_FACTORY, credential).build();
+        return new Gmail.Builder(Utils.HTTP_TRANSPORT, Utils.JSON_FACTORY, credential).setApplicationName(AppengineEnv.APP_ID).build();
     }
 
     /**
@@ -64,34 +70,29 @@ public class Messaging {
     }
 
     /**
-     * @param from
-     * @param to
+     * Sens a service message
+     * @param sender
+     * @param recipient
+     * @param subject
+     * @param body
      */
-    public static void sendMessage(String from, String to) {
-        AppIdentityCredential credential =
-                new AppIdentityCredential(Arrays.asList(GmailScopes.GMAIL_COMPOSE));
-        new Gmail.Builder(new UrlFetchTransport(), new JacksonFactory(), credential).build();
+    public static void sendServiceMessage(String sender, String recipient, String subject, String body){
+        Properties props = new Properties();
+        Session session = Session.getDefaultInstance(props, null);
 
-        // Get system properties
-        Properties properties = System.getProperties();
-
-        // Get the default Session object.
-        Session session = Session.getDefaultInstance(properties);
         try {
-            MimeMessage message = new MimeMessage(session);
+            MimeMessage msg = new MimeMessage(session);
+            msg.setFrom(new InternetAddress(sender));
+            msg.addRecipient(MimeMessage.RecipientType.TO,
+                    new InternetAddress(recipient));
+            msg.setSubject(subject);
+            msg.setText(body);
+            Transport.send(msg);
 
-            // Set From: header field of the header.
-            message.setFrom(new InternetAddress(from));
-
-            // Set To: header field of the header.
-            message.addRecipient(javax.mail.Message.RecipientType.TO,
-                    new InternetAddress(to));
-
-            message.setSubject("");
-            message.setText("");
+        } catch (AddressException e) {
+            logger.error("Could not send message", e);
         } catch (MessagingException e) {
-            e.printStackTrace();
+            logger.error("Could not send message", e);
         }
-
     }
 }

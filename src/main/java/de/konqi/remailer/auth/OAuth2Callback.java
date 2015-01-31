@@ -4,8 +4,11 @@ import com.google.api.client.auth.oauth2.AuthorizationCodeFlow;
 import com.google.api.client.auth.oauth2.AuthorizationCodeResponseUrl;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.appengine.auth.oauth2.AbstractAppEngineAuthorizationCodeCallbackServlet;
+import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserServiceFactory;
 import de.konqi.remailer.Utils;
+import de.konqi.remailer.db.EmailMapping;
+import de.konqi.remailer.db.OfyService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -18,11 +21,14 @@ public class OAuth2Callback extends AbstractAppEngineAuthorizationCodeCallbackSe
     @Override
     protected void onSuccess(HttpServletRequest req, HttpServletResponse resp, Credential credential)
             throws ServletException, IOException {
-        // String email = UserServiceFactory.getUserService().getCurrentUser().getEmail();
-        // StoredCredential storedCredential = new StoredCredential(credential);
-        // Utils.CREDENTIAL_STORE.set(email, storedCredential);
+        // Store mapping email to user id in datastore
+        User user = UserServiceFactory.getUserService().getCurrentUser();
+        EmailMapping mapping = new EmailMapping();
+        mapping.setOwnerEmail(user.getEmail());
+        mapping.setUserId(user.getUserId());
+        OfyService.ofy().save().entity(mapping).now();
 
-        resp.sendRedirect("/");
+        resp.sendRedirect("/oauth2/settings.html");
     }
 
     @Override

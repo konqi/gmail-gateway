@@ -14,16 +14,16 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>OAuth2Callback</servlet-name>
-        <url-pattern>/oauth2callback</url-pattern>
+        <url-pattern>/oauth2/oauth2callback</url-pattern>
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>OAuth2AppEngine</servlet-name>
-        <servlet-class>de.konqi.remailer.auth.OAuth2AppEngine</servlet-class>
+        <servlet-name>SettingsPage</servlet-name>
+        <servlet-class>de.konqi.remailer.auth.SettingsPage</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>OAuth2AppEngine</servlet-name>
-        <url-pattern>/oauth2</url-pattern>
+        <servlet-name>SettingsPage</servlet-name>
+        <url-pattern>/oauth2/settings.html</url-pattern>
     </servlet-mapping>
 
     <servlet>
@@ -48,7 +48,7 @@
     <security-constraint>
         <web-resource-collection>
             <web-resource-name>authenticated</web-resource-name>
-            <url-pattern>/oauth2*</url-pattern>
+            <url-pattern>/oauth2/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <role-name>*</role-name>
