@@ -75,13 +75,13 @@ public class MailServlet extends HttpServlet {
             String recipientCc = handle.getCc();
             String recipientBcc = handle.getBcc();
 
-            if (recipientTo != null) {
+            if (recipientTo != null && recipientTo.length() > 3) {
                 message.setRecipient(Message.RecipientType.TO, new InternetAddress(recipientTo));
             }
-            if (recipientCc != null) {
+            if (recipientCc != null && recipientCc.length() > 3) {
                 message.setRecipient(Message.RecipientType.CC, new InternetAddress(recipientCc));
             }
-            if (recipientBcc != null) {
+            if (recipientBcc != null && recipientBcc.length() > 3) {
                 message.setRecipient(Message.RecipientType.BCC, new InternetAddress(recipientBcc));
             }
 
