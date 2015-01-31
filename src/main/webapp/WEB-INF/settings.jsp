@@ -10,10 +10,19 @@
     <title>Pirate Mail Gateway</title>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
     <style type="text/css">
-        /* Move down content because we have a fixed navbar that is 50px tall */
+        position: relative;
+        min-height: 100%;
         body {
         padding-top: 50px;
-        padding-bottom: 20px;
+        margin-bottom: 20px;
+        }
+        .footer {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        /* Set the fixed height of the footer here */
+        height: 20px;
+        background-color: #f5f5f5;
         }
     </style>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
@@ -31,7 +40,8 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Pirate Mail Gateway</a>
+            <a class="navbar-brand" href="#"><span class="glyphicon glyphicon-eye-close"></span>&nbsp;&nbsp;Pirate Mail
+                Gateway</a>
         </div>
         <ul class="nav navbar-nav navbar-right">
             <li><a href="#">Welcome back, ${mapping.ownerEmail}</a></li>
@@ -45,24 +55,14 @@
     <div class="container">
         <h1>Sending mail as you from anywhere</h1>
 
-        <p>&lt;handle&gt;@
-            ${mailDomain}
+        <p>
+            &hellip; your professional mail imposter service <span class="glyphicon glyphicon-thumbs-up"></span>
         </p>
 
         <a class="btn btn-primary btn-lg" data-toggle="collapse" href="#collapseInfo" aria-expanded="false"
-           aria-controls="collapseInfo">Learn more »</a>
+           aria-controls="collapseInfo">Instructions »</a>
 
         <div class="collapse" id="collapseInfo">
-            <h2>What's this for</h2>
-            Say...
-            <ul>
-                <li>you want to allow others to send email from your email address, but only to certain recipients</li>
-                <li>you want to send your mail with your google apps account but you don't want to log into that
-                    account.<br/>
-                    That's usually because there's that stupid mailing list which can only be accesses from inside your
-                    company's Google Apps account
-                </li>
-            </ul>
             <h2>How does it work</h2>
             <ol>
                 <li>This app requests your permission to send emails as your Gmail or Google Apps account (don't worry,
@@ -121,7 +121,8 @@
                 <td><input type="email" id="newHandleCc" placeholder="cc"></td>
                 <td><input type="email" id="newHandleBcc" placeholder="bcc"></td>
                 <td>
-                    <button type="btn btn-default"><span class="glyphicon glyphicon-floppy-save"></span></button>
+                    <button type="submit" class="btn btn-sm btn-default"><span
+                            class="glyphicon glyphicon-floppy-save"></span></button>
                 </td>
             </tr>
             </tfoot>
@@ -141,17 +142,22 @@
                         <c:out value="${currentHandle.bcc}"></c:out>
                     </td>
                     <td>
-                        <a class="btn btn-default" href="javascript:deleteHandle('${currentHandle.handle}');"><span class="glyphicon glyphicon-trash"></span></a>
+                        <a class="btn btn-sm btn-default"
+                           href="javascript:deleteHandle('${currentHandle.handle}');"><span
+                                class="glyphicon glyphicon-trash"></span></a>
                     </td>
                 </tr>
             </c:forEach>
             </tbody>
         </table>
     </form>
-
-    <footer class="footer">
-        <p>&copy; konqi 2015</p>
-    </footer>
 </div>
+
+<footer class="footer">
+    <div class="container">
+        <p class="text-muted">&copy; konqi 2015</p>
+    </div>
+</footer>
+
 </body>
 </html>

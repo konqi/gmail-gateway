@@ -3,6 +3,7 @@ package de.konqi.remailer.db;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Ignore;
 import com.googlecode.objectify.annotation.Parent;
 
 /**
@@ -17,6 +18,8 @@ public class Handle {
     private String to;
     private String cc;
     private String bcc;
+    @Ignore
+    private String action;
 
     public Key<EmailMapping> getParent() {
         return parent;
@@ -56,5 +59,13 @@ public class Handle {
 
     public void setBcc(String bcc) {
         this.bcc = bcc;
+    }
+
+    public String getAction() {
+        return action;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
     }
 }

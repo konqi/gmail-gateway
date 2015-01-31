@@ -40,11 +40,13 @@ $(function(){
 
 function deleteHandle(handleName){
     var payload = {
-        handle: handleName
+        handle: handleName,
+        action: "DELETE"
     }
 
     console.log(payload);
-    $.ajax({type:"DELETE", url: "?type=Handle", data: JSON.stringify(payload), contentType: "application/json"}).done(function(data, status, jqxhr){
+    $.ajax({type:"POST", url: "?type=Handle", data: JSON.stringify(payload), contentType: "application/json"}).done(function(data, status, jqxhr){
         console.log(data, status, jqxhr);
+        location.reload();
     });
 }

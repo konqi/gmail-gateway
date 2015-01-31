@@ -22,6 +22,7 @@ import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.text.SimpleDateFormat;
 import java.util.Properties;
 
 /**
@@ -36,6 +37,11 @@ public class MailServlet extends HttpServlet {
         Session session = Session.getDefaultInstance(props, null);
         InternetAddress address = null;
         MimeMessage message = null;
+
+        String localAddress = req.getRequestURI().substring(req.getServletPath().length() + 1);
+        localAddress = localAddress.substring(0, localAddress.indexOf('@'));
+        logger.info("local address: " + localAddress);
+
         try {
             message = new MimeMessage(session, req.getInputStream());
             address = (InternetAddress) message.getFrom()[0];
@@ -64,9 +70,6 @@ public class MailServlet extends HttpServlet {
             credential.setRefreshToken(storedCredential.getRefreshToken());
 
             // Get intended recipients
-            String localAddress = req.getRequestURI().substring(req.getServletPath().length() + 1);
-            localAddress = localAddress.substring(0, localAddress.indexOf('@'));
-            logger.info("local address: " + localAddress);
             Handle handle = OfyService.ofy().load().key(Key.create(Key.create(mapping), Handle.class, localAddress)).now();
             String recipientTo = handle.getTo();
             String recipientCc = handle.getCc();
@@ -94,13 +97,20 @@ public class MailServlet extends HttpServlet {
                     logger.info("There's been an invalid request. ", e);
                     // bounce message
                     String subject = "unknown subject";
+                    String sentDate = new String();
+                    String receivedDate = new String();
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("d.M.y H:m:s.S");
                     if (message != null) {
                         subject = message.getSubject();
+                        sentDate = simpleDateFormat.format(message.getSentDate());
+                        receivedDate = simpleDateFormat.format(message.getReceivedDate());
                     }
-                    Messaging.sendServiceMessage(AppengineEnv.MAIL_DOMAIN, address.getAddress(), "Something is wrong!",
+                    Messaging.sendServiceMessage(localAddress + "@" + AppengineEnv.MAIL_DOMAIN, address.getAddress(), "Something is wrong!",
                             "I'm terribly sorry but i could not handle your last email. \n\n" +
-                                    "The subject was '" + subject + "'.\n" +
-                                    "The reason why processing failed was " + e.getMessage() + "\n\n" +
+                                    "The subject was: " + subject +
+                                    " (sent: " + sentDate +
+                                    ", received: " + receivedDate + ")\n\n" +
+                                    "The reason why processing failed is: " + e.getMessage() + "\n\n" +
                                     "Please try again later.");
                 } else {
                     logger.error("Could read original sender for service response mail.", e);

@@ -5,6 +5,8 @@ import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
 
 /**
+ * Entity class for mapping between inbound sender email, owner email and id
+ *
  * @author konqi
  */
 @Entity

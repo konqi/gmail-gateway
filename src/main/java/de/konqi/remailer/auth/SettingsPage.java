@@ -68,40 +68,13 @@ public class SettingsPage extends AbstractAppEngineAuthorizationCodeServlet {
             } else if(o instanceof Handle) {
                 Handle handle = (Handle)o;
                 handle.setParent(Key.create(mapping));
-                OfyService.ofy().save().entity(handle).now();
-                logger.info("Handle added for for owner " + user.getEmail());
-
-                resp.setStatus(HttpStatus.SC_ACCEPTED);
-            } else {
-                logger.error("Invalid request body");
-                resp.sendError(HttpStatus.SC_BAD_REQUEST);
-            }
-        } catch (ClassNotFoundException e) {
-            logger.error("Invalid request body", e);
-            resp.sendError(HttpStatus.SC_BAD_REQUEST);
-        }
-    }
-
-    @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        User user = UserServiceFactory.getUserService().getCurrentUser();
-        EmailMapping mapping = OfyService.ofy().load().key(Key.create(EmailMapping.class, user.getEmail())).now();
-
-        String type = req.getParameter("type");
-        if(type == null){
-            resp.sendError(HttpStatus.SC_BAD_REQUEST);
-        }
-
-        logger.info(type);
-        // Parse request
-        try {
-            Object o = Utils.OBJECT_MAPPER.readValue(req.getInputStream(), Class.forName("de.konqi.remailer.db." + type));
-            if(o instanceof Sender){
-            } else if(o instanceof Handle) {
-                Handle handle = (Handle)o;
-                handle.setParent(Key.create(mapping));
-                OfyService.ofy().delete().entity(handle).now();
-                logger.info("Handle deleted for for owner " + user.getEmail());
+                if(handle.getAction().equals("DELETE")){
+                    OfyService.ofy().delete().entity(handle).now();
+                    logger.info("Handle deleted for for owner " + user.getEmail());
+                } else {
+                    OfyService.ofy().save().entity(handle).now();
+                    logger.info("Handle added for for owner " + user.getEmail());
+                }
 
                 resp.setStatus(HttpStatus.SC_ACCEPTED);
             } else {
