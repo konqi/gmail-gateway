@@ -68,7 +68,7 @@ public class SettingsPage extends AbstractAppEngineAuthorizationCodeServlet {
             } else if(o instanceof Handle) {
                 Handle handle = (Handle)o;
                 handle.setParent(Key.create(mapping));
-                if(handle.getAction().equals("DELETE")){
+                if(handle.getAction() != null && handle.getAction().equals("DELETE")){
                     OfyService.ofy().delete().entity(handle).now();
                     logger.info("Handle deleted for for owner " + user.getEmail());
                 } else {

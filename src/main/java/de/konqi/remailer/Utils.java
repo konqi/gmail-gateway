@@ -63,7 +63,7 @@ public class Utils {
 
     public static String getRedirectUri(HttpServletRequest req) {
         GenericUrl url = new GenericUrl(req.getRequestURL().toString());
-        url.setRawPath("/oauth2/oauth2callback");
+        url.setRawPath("/oauth2callback");
         return url.build();
     }
 
